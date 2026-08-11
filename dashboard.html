@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom & Infrastructure Capacity Dashboard</title>
+  
+  <!-- Modern Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Variables for Premium Design System - DARK Theme (Default) */
+    :root {
+      --bg-base: #0b0f19;
+      --bg-surface: #131a2e;
+      --bg-surface-glass: rgba(19, 26, 46, 0.6);
+      --bg-card: #1c253d;
+      --bg-card-glass: rgba(28, 37, 61, 0.7);
+      
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-kpi: #ffffff;
+      
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(99, 102, 241, 0.3);
+      --border-card-hover: rgba(255, 255, 255, 0.12);
+      
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.15);
+      --danger: #f43f5e;
+      --danger-glow: rgba(244, 63, 94, 0.15);
+      --info: #0ea5e9;
+      --info-glow: rgba(14, 165, 233, 0.15);
+
+      --bg-hover: rgba(255, 255, 255, 0.015);
+      --bg-item: rgba(255, 255, 255, 0.02);
+      --bg-th: rgba(255, 255, 255, 0.02);
+      --progress-bg: rgba(255, 255, 255, 0.05);
+      --badge-bg: rgba(255, 255, 255, 0.05);
+      
+      --title-gradient: linear-gradient(135deg, #fff 30%, var(--text-secondary) 100%);
+      --bg-gradient: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
+                    radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.95) 0px, var(--bg-base) 100%);
+
+      --shadow-sm: 0 2px 8px -2px rgba(0,0,0,0.5);
+      --shadow-md: 0 12px 24px -4px rgba(0,0,0,0.6);
+      --shadow-lg: 0 20px 40px -8px rgba(0,0,0,0.7);
+      
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* CSS Variables overrides - LIGHT Theme */
+    body.light-theme {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-glass: rgba(255, 255, 255, 0.7);
+      --bg-card: #ffffff;
+      --bg-card-glass: rgba(255, 255, 255, 0.85);
+      
+      --accent: #4f46e5;
+      --accent-glow: rgba(79, 70, 229, 0.08);
+      --accent-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-kpi: #0f172a;
+      
+      --border-color: rgba(15, 23, 42, 0.08);
+      --border-highlight: rgba(79, 70, 229, 0.25);
+      --border-card-hover: rgba(15, 23, 42, 0.12);
+      
+      --success: #059669;
+      --success-glow: rgba(5, 150, 105, 0.08);
+      --warning: #d97706;
+      --warning-glow: rgba(217, 119, 6, 0.08);
+      --danger: #dc2626;
+      --danger-glow: rgba(220, 38, 38, 0.08);
+      --info: #0284c7;
+      --info-glow: rgba(2, 132, 199, 0.08);
+
+      --bg-hover: rgba(15, 23, 42, 0.02);
+      --bg-item: rgba(15, 23, 42, 0.015);
+      --bg-th: rgba(15, 23, 42, 0.02);
+      --progress-bg: rgba(15, 23, 42, 0.06);
+      --badge-bg: rgba(15, 23, 42, 0.04);
+      
+      --title-gradient: linear-gradient(135deg, #0f172a 30%, #475569 100%);
+      --bg-gradient: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.04) 0px, transparent 50%),
+                    radial-gradient(at 50% 50%, rgba(241, 245, 249, 0.95) 0px, var(--bg-base) 100%);
+
+      --shadow-sm: 0 2px 8px -2px rgba(0,0,0,0.08);
+      --shadow-md: 0 12px 24px -4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 20px 40px -8px rgba(0,0,0,0.1);
+    }
+
+    /* Core Reset & Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      padding: 2rem 1.5rem;
+      transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, background-image 0.4s ease;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Header Design */
+    header {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .header-title-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-icon {
+      background: var(--accent-gradient);
+      padding: 0.75rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .header-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+    }
+
+    .header-text h1 {
+      font-size: 1.75rem;
+      background: var(--title-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: var(--transition-smooth);
+    }
+
+    .header-text p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Switcher Controls and Toggle Panel */
+    .controls-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .year-switcher {
+      display: inline-flex;
+      background: var(--bg-surface-glass);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem;
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .year-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      position: relative;
+      z-index: 2;
+    }
+
+    .year-btn.active {
+      color: white;
+      background: var(--accent-gradient);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .year-btn:hover:not(.active) {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.light-theme .year-btn:hover:not(.active) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      background: var(--bg-surface-glass);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.6rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.05);
+    }
+
+    body.light-theme .theme-toggle-btn:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* SVG Toggle visibilities */
+    .sun-icon {
+      display: block;
+    }
+    .moon-icon {
+      display: none;
+    }
+
+    body.light-theme .sun-icon {
+      display: none;
+    }
+    body.light-theme .moon-icon {
+      display: block;
+    }
+
+    /* KPI Summary Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      transition: var(--transition-smooth);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-highlight);
+    }
+
+    .kpi-card.accent-kpi::before { background: var(--accent-gradient); }
+    .kpi-card.success-kpi::before { background: var(--success); }
+    .kpi-card.warning-kpi::before { background: var(--warning); }
+    .kpi-card.danger-kpi::before { background: var(--danger); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .kpi-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .kpi-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kpi-card.accent-kpi .kpi-icon { background: var(--accent-glow); color: var(--accent); }
+    .kpi-card.success-kpi .kpi-icon { background: var(--success-glow); color: var(--success); }
+    .kpi-card.warning-kpi .kpi-icon { background: var(--warning-glow); color: var(--warning); }
+    .kpi-card.danger-kpi .kpi-icon { background: var(--danger-glow); color: var(--danger); }
+
+    .kpi-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .kpi-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-kpi);
+      margin-bottom: 0.25rem;
+      transition: var(--transition-smooth);
+    }
+
+    .kpi-footer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Dashboard Grid layout - animated width transitions */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      transition: var(--transition-smooth);
+    }
+
+    @media (min-width: 1024px) {
+      .dashboard-grid.show-sidebar {
+        grid-template-columns: 350px 1fr;
+      }
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: var(--bg-card-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: var(--transition-smooth);
+    }
+
+    .content-card:hover {
+      border-color: var(--border-card-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .card-header-area h2 {
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .card-header-area h2 svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent);
+    }
+
+    .card-badge {
+      background: var(--badge-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: var(--transition-smooth);
+    }
+
+    /* Student breakdown list style */
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .student-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-item);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .student-item:hover {
+      background: var(--bg-hover);
+      transform: translateX(4px);
+    }
+
+    .student-prog {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .student-count {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--bg-base);
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    /* Tables Styles */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    th {
+      background: var(--bg-th);
+      color: var(--text-secondary);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr {
+      transition: var(--transition-smooth);
+    }
+
+    tr:hover td {
+      background: var(--bg-hover);
+    }
+
+    .infra-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* Visual indicators */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-success { background: var(--success-glow); color: var(--success); }
+    .badge-warning { background: var(--warning-glow); color: var(--warning); }
+    .badge-danger { background: var(--danger-glow); color: var(--danger); }
+    .badge-muted { background: var(--badge-bg); color: var(--text-muted); }
+
+    /* Progress bar */
+    .progress-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 100px;
+    }
+
+    .progress-bg {
+      flex-grow: 1;
+      height: 6px;
+      background: var(--progress-bg);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+      transition: var(--transition-smooth);
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: var(--transition-smooth);
+      width: 0%;
+    }
+
+    .progress-bar.success { background: var(--success); }
+    .progress-bar.warning { background: var(--warning); }
+    .progress-bar.danger { background: var(--danger); }
+
+    .progress-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Alert / Note component */
+    .note-box {
+      background: rgba(99, 102, 241, 0.05);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      border-radius: 0 12px 12px 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      margin-top: 0.5rem;
+    }
+
+    .note-box.info-notes {
+      border-left-color: var(--info);
+      background: rgba(14, 165, 233, 0.03);
+    }
+
+    .note-icon {
+      color: var(--info);
+      margin-top: 0.15rem;
+      flex-shrink: 0;
+    }
+
+    .note-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .note-content {
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+    }
+
+    .note-content ul {
+      margin-left: 1.2rem;
+      margin-top: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    /* Tooltip styling */
+    .tooltip-container {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted var(--text-muted);
+    }
+
+    .tooltip-container:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #fff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      white-space: normal;
+      width: 200px;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      line-height: 1.25;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="header-title-container">
+        <div class="header-icon">
+          <!-- Calendar/Dashboard Icon -->
+          <svg viewBox="0 0 24 24">
+            <path d="M19,4H18V2H16V4H8V2H6V4H5A2,2 0 0,0 3,6V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V6A2,2 0 0,0 19,4M19,20H5V9H19V20M17,11H12V16H17V11Z"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>Capacity & Allocation Analyzer</h1>
+          <p>Multi-year academic infrastructure deficit forecasting & tracking</p>
+        </div>
+      </div>
+      
+      <!-- Top controls wrapper -->
+      <div class="controls-wrapper">
+        <!-- Interactive Year Selector -->
+        <div class="year-switcher" role="tablist">
+          <button class="year-btn active" role="tab" aria-selected="true" onclick="switchYear('2026-2027', this)">2026-27 (Current)</button>
+          <button class="year-btn" role="tab" aria-selected="false" onclick="switchYear('2027-2028', this)">2027-28</button>
+          <button class="year-btn" role="tab" aria-selected="false" onclick="switchYear('2028-2029', this)">2028-29</button>
+        </div>
+        
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+          <!-- Sun Icon for switching to Light Mode -->
+          <svg class="sun-icon" viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;">
+            <path d="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2A1,1 0 0,1 13,3V5A1,1 0 0,1 12,6A1,1 0 0,1 11,5V3A1,1 0 0,1 12,2M12,18A1,1 0 0,1 13,19V21A1,1 0 0,1 12,22A1,1 0 0,1 11,21V19A1,1 0 0,1 12,18M20,11A1,1 0 0,1 21,12V13A1,1 0 0,1 20,14A1,1 0 0,1 19,13V12A1,1 0 0,1 20,11M5,11A1,1 0 0,1 6,12V13A1,1 0 0,1 5,14A1,1 0 0,1 4,13V12A1,1 0 0,1 5,11M16.24,5.76C16.63,5.37 17.26,5.37 17.66,5.76L19.07,7.17C19.46,7.56 19.46,8.2 19.07,8.59C18.68,8.98 18.05,8.98 17.66,8.59L16.24,7.17C15.85,6.78 15.85,6.14 16.24,5.76M6.34,15.66C6.73,15.27 7.36,15.27 7.76,15.66L9.17,17.07C9.56,17.46 9.56,18.1 9.17,18.49C8.78,18.88 8.15,18.88 7.76,18.49L6.34,17.07C5.95,16.68 5.95,16.04 6.34,15.66M17.66,15.66C18.05,15.27 18.68,15.27 19.07,15.66L20.48,17.07C20.87,17.46 20.87,18.1 20.48,18.49C20.09,18.88 19.46,18.88 19.07,18.49L17.66,17.07C17.27,16.68 17.27,16.04 17.66,15.66M7.76,5.76C8.15,6.15 8.15,6.78 7.76,7.17L6.34,8.59C5.95,8.98 5.32,8.98 4.93,8.59C4.54,8.2 4.54,7.56 4.93,7.17L6.34,5.76C6.73,5.37 7.36,5.37 7.76,5.76Z"/>
+          </svg>
+          <!-- Moon Icon for switching to Dark Mode -->
+          <svg class="moon-icon" viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: currentColor;">
+            <path d="M12.1,22C6.5,22,2,17.5,2,11.9C2,7.4,5,3.5,9.2,2.2C9.7,2,10.3,2.4,10.4,2.9C10.5,3.4,10.2,4,9.7,4.2C6.6,5.3,4.4,8.4,4.4,11.9C4.4,16.2,7.9,19.7,12.2,19.7C15.7,19.7,18.8,17.5,19.9,14.4C20.1,13.9,20.7,13.6,21.2,13.7C21.7,13.8,22.1,14.4,21.9,14.9C20.6,19.1,16.7,22,12.1,22Z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI Summary Row -->
+    <div class="kpi-grid">
+      <!-- Total Students -->
+      <div class="kpi-card accent-kpi">
+        <div class="kpi-header">
+          <span class="kpi-title">Student Enrollment</span>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12,3A3,3 0 0,0 9,6A3,3 0 0,0 12,9A3,3 0 0,0 15,6A3,3 0 0,0 12,3M6,6A3,3 0 0,0 3,9A3,3 0 0,0 6,12A3,3 0 0,0 9,9A3,3 0 0,0 6,6M18,6A3,3 0 0,0 15,9A3,3 0 0,0 18,12A3,3 0 0,0 21,9A3,3 0 0,0 18,6M12,11c-2.33,0 -7,1.17 -7,3.5V17H19V14.5C19,12.17 14.33,11 12,11M6,13.75c-2.28,0 -6,1.13 -6,3.25V19.5H9V17c0,-1.08 0.44,-2.23 1.25,-3.25C8.38,13.88 7.04,13.75 6,13.75M18,13.75c-1.04,0 -2.38,0.13 -4.25,1c0.81,1.02 1.25,2.17 1.25,3.25v2.5h9V17C24,14.88 20.28,13.75 18,13.75Z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpi-students">5,850</div>
+          <div class="kpi-footer" id="kpi-students-sub">Cohort progression estimate</div>
+        </div>
+      </div>
+
+      <!-- Target Infrastructure -->
+      <div class="kpi-card success-kpi">
+        <div class="kpi-header">
+          <span class="kpi-title">Total Rooms Required</span>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M19 19H5V5H19V19M7 10H9V14H7V10M11 10H13V14H11V10M15 10H17V14H15V10"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpi-req-rooms">116</div>
+          <div class="kpi-footer">Cumulative required spaces</div>
+        </div>
+      </div>
+
+      <!-- Incremental Deficit -->
+      <div class="kpi-card warning-kpi">
+        <div class="kpi-header">
+          <span class="kpi-title">
+            <span class="tooltip-container" data-tooltip="Deficit additions introduced in this year only, assuming prior requirements have been fulfilled.">Incremental Deficit</span>
+          </span>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,5.5V11H18.5V13H13V18.5H11V13H5.5V11H11V5.5H13Z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpi-inc-deficit">20</div>
+          <div class="kpi-footer">New spaces needed this year</div>
+        </div>
+      </div>
+
+      <!-- Cumulative Deficit -->
+      <div class="kpi-card danger-kpi">
+        <div class="kpi-header">
+          <span class="kpi-title">
+            <span class="tooltip-container" data-tooltip="The full difference between required spaces and the starting baseline available capacity.">Total Cumulative Deficit</span>
+          </span>
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M11 15H13V17H11V15M11 7H13V13H11V7M12 2C6.47 2 2 6.5 2 12S6.47 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.5 20 4 16.5 4 12S7.5 4 12 4 20 7.5 20 12 16.5 20 12 20Z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpi-cum-deficit">20</div>
+          <div class="kpi-footer">Overall capacity gap from baseline</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid show-sidebar">
+      
+      <!-- Left Column: Student Cohort Breakdown -->
+      <div class="content-card animate-fade-in" id="students-card">
+        <div class="card-header-area">
+          <h2>
+            <!-- Students Icon -->
+            <svg viewBox="0 0 24 24"><path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/></svg>
+            Student Breakdown
+          </h2>
+          <span class="card-badge" id="student-academic-year">2026-2027</span>
+        </div>
+        
+        <div id="student-flow-details" style="display: none; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary);">
+            <span>Incoming Students:</span>
+            <strong style="color: var(--success);" id="student-incoming-val">-</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+            <span>Exiting/Graduating Students:</span>
+            <strong style="color: var(--danger);" id="student-exiting-val">-</strong>
+          </div>
+        </div>
+
+        <div class="student-list" id="student-list-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Right Column: Infrastructure & Capacity Tracking -->
+      <div class="content-card animate-fade-in" id="infra-card" style="animation-delay: 0.1s;">
+        <div class="card-header-area">
+          <h2>
+            <!-- Map/Layout Icon -->
+            <svg viewBox="0 0 24 24"><path d="M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V8A2,2 0 0,1 4,6H8V4A2,2 0 0,1 10,2M14,6V4H10V6H14M4,8V20H20V8H4M5,10H11V14H5V10M13,10H19V12H13V10M13,14H19V16H13V14M5,16H11V18H5V16Z"/></svg>
+            Allocation & Capacity Matrices
+          </h2>
+          <span class="card-badge">Section Breakdown</span>
+        </div>
+
+        <!-- Section: Classrooms -->
+        <h3 style="font-size: 1rem; color: var(--accent); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Classroom Spaces</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Space Type</th>
+                <th>Baseline Available</th>
+                <th>Required</th>
+                <th>Total Deficit</th>
+                <th>Incremental Deficit</th>
+                <th style="width: 130px;">Capacity Met</th>
+              </tr>
+            </thead>
+            <tbody id="classroom-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section: Laboratories -->
+        <h3 style="font-size: 1rem; color: var(--accent); margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Laboratory Spaces</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Space Type</th>
+                <th>Baseline Available</th>
+                <th>Required</th>
+                <th>Total Deficit</th>
+                <th>Incremental Deficit</th>
+                <th style="width: 130px;">Capacity Met</th>
+              </tr>
+            </thead>
+            <tbody id="laboratory-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section: Faculty Rooms -->
+        <h3 style="font-size: 1rem; color: var(--accent); margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Faculty Offices</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Space Type</th>
+                <th>Baseline Available</th>
+                <th>Required</th>
+                <th>Total Deficit</th>
+                <th>Incremental Deficit</th>
+                <th style="width: 130px;">Capacity Met</th>
+              </tr>
+            </thead>
+            <tbody id="faculty-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section: Utilities -->
+        <h3 style="font-size: 1rem; color: var(--accent); margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Utility & Recreational Spaces</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Space Type</th>
+                <th>Baseline Available</th>
+                <th>Required</th>
+                <th>Total Deficit</th>
+                <th>Incremental Deficit</th>
+                <th style="width: 130px;">Capacity Met</th>
+              </tr>
+            </thead>
+            <tbody id="utility-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Notes and Context footer -->
+        <div class="note-box info-notes animate-fade-in" id="notes-container">
+          <div class="note-icon">
+            <svg viewBox="0 0 24 24"><path d="M11,9H13V7H11M12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C16.42,4 20,7.58 20,12C20,16.42 16.42,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/></svg>
+          </div>
+          <div class="note-content">
+            <strong>Allocation Remarks:</strong>
+            <ul id="note-list">
+              <!-- Populated by JS -->
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Data Script -->
+  <script>
+    const yearData = {
+      "2026-2027": {
+        yearLabel: "Academic Year 2026-2027 (Current)",
+        students: {
+          total: 5850, // Displayed in the top summary card
+          incoming: "N/A",
+          exiting: "N/A",
+          breakdown: [] // Removed student breakdown for this year only
+        },
+        classrooms: [
+          { name: "No.of 60 seating", available: 59, required: 72, totalDeficit: 13, incrementalDeficit: 13 },
+          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
+          { name: "No.of 30 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
+          { name: "Learning Hubs", available: 9, required: 9, totalDeficit: 0, incrementalDeficit: 0 },
+          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 1 },
+          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        laboratories: [
+          { name: "Hardware lab", available: 16, required: 16, totalDeficit: 0, incrementalDeficit: 0 },
+          { name: "Computer lab", available: 6, required: 10, totalDeficit: 4, incrementalDeficit: 4 }
+        ],
+        facultyRooms: [
+          { name: "Department faculty Rooms", available: 11, required: 13, totalDeficit: 2, incrementalDeficit: 2 },
+          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        utilities: [
+          { name: "Pantry", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
+          { name: "Faculty Recreation Room", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        notes: [
+          "Requirement for 2026-2027 classrooms (60-seating) is 13 additional rooms, yielding a total target of 72.",
+          "Requirement for 2026-2027 Brand Builder Studio (BBS) is 1 additional studio, yielding a total target of 4.",
+          "Requirement for 2026-2027 computer labs is 4 additional labs, yielding a total target of 10.",
+          "Requirement for 2026-2027 faculty rooms is 2 additional rooms, yielding a total target of 13."
+        ]
+      },
+      "2027-2028": {
+        yearLabel: "Academic Year 2027-2028 (Upcoming)",
+        students: {
+          total: 7911,
+          incoming: 2920,
+          exiting: 859,
+          breakdown: [
+            { program: "RTC S&H", count: 1800 },
+            { program: "RTC II year", count: 1560 },
+            { program: "RTC III year", count: 1290 },
+            { program: "RTC IV year", count: 990 },
+            { program: "MCA", count: 240 },
+            { program: "MBA", count: 240 },
+            { program: "RGU I year", count: 420 },
+            { program: "RGU II year", count: 98 },
+            { program: "RGU III year", count: 0, isDash: true },
+            { program: "Intellect Science", count: 506 },
+            { program: "Intellect Engineering", count: 649 },
+            { program: "Intellect MBA", count: 118 }
+          ]
+        },
+        classrooms: [
+          { name: "No.of 60 seating", available: 59, required: 101, totalDeficit: 42, incrementalDeficit: 29 },
+          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0, isDash: true },
+          { name: "No.of 30 seating", available: 0, required: 6, totalDeficit: 6, incrementalDeficit: 6 },
+          { name: "Learning Hubs", available: 9, required: 13, totalDeficit: 4, incrementalDeficit: 4 },
+          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 0 },
+          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        laboratories: [
+          { name: "Hardware lab", available: 16, required: 18, totalDeficit: 2, incrementalDeficit: 2 },
+          { name: "Computer lab", available: 6, required: 10, totalDeficit: 4, incrementalDeficit: 0 }
+        ],
+        facultyRooms: [
+          { name: "Department faculty Rooms", available: 11, required: 15, totalDeficit: 4, incrementalDeficit: 2 },
+          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        utilities: [
+          { name: "Pantry", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 1 },
+          { name: "Faculty Recreation Room", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 1 }
+        ],
+        notes: [
+          "Incremental deficits shown exclude the previous year's required additions (2026-2027) which are assumed to be built.",
+          "For 60-seating Classrooms: 101 (Required) - 59 (Baseline) - 13 (26-27 Required) = 29 Incremental Deficit.",
+          "For Computer Labs: 10 (Required) - 6 (Baseline) - 4 (26-27 Required) = 0 Incremental Deficit."
+        ]
+      },
+      "2028-2029": {
+        yearLabel: "Academic Year 2028-2029 (Upcoming)",
+        students: {
+          total: 9283,
+          incoming: 3160,
+          exiting: 1488,
+          breakdown: [
+            { program: "RTC S&H", count: 1980 },
+            { program: "RTC II year", count: 1800 },
+            { program: "RTC III year", count: 1560 },
+            { program: "RTC IV year", count: 1290 },
+            { program: "MCA", count: 240 },
+            { program: "MBA", count: 240 },
+            { program: "RGU I year", count: 480 },
+            { program: "RGU II year", count: 120 },
+            { program: "RGU III year", count: 98 },
+            { program: "Intellect Science", count: 609 },
+            { program: "Intellect Engineering", count: 746 },
+            { program: "Intellect MBA", count: 120 }
+          ]
+        },
+        classrooms: [
+          { name: "No.of 60 seating", available: 59, required: 123, totalDeficit: 64, incrementalDeficit: 22 },
+          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0, isDash: true },
+          { name: "No.of 30 seating", available: 0, required: 3, totalDeficit: 3, incrementalDeficit: 0 },
+          { name: "Learning Hubs", available: 9, required: 16, totalDeficit: 7, incrementalDeficit: 3 },
+          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 0 },
+          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        laboratories: [
+          { name: "Hardware lab", available: 16, required: 20, totalDeficit: 4, incrementalDeficit: 2 },
+          { name: "Computer lab", available: 6, required: 13, totalDeficit: 7, incrementalDeficit: 3 }
+        ],
+        facultyRooms: [
+          { name: "Department faculty Rooms", available: 11, required: 18, totalDeficit: 7, incrementalDeficit: 3 },
+          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
+        ],
+        utilities: [
+          { name: "Pantry", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 0 },
+          { name: "Faculty Recreation Room", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 0 }
+        ],
+        notes: [
+          "Incremental deficits shown exclude baseline requirements of both 2026-27 and 2027-28.",
+          "For No.of 30 seating Classrooms: requirement dropped from 6 to 3, yielding an incremental deficit of 0.",
+          "For Pantry / Recreation Room: requirement remains constant at 1, hence 0 incremental deficit for 2028-2029."
+        ]
+      }
+    };
+
+    function formatNumber(num) {
+      if (typeof num === 'number') {
+        return num.toLocaleString();
+      }
+      return num;
+    }
+
+    function generateProgressHTML(available, required) {
+      if (required === 0) {
+        return `
+          <div class="progress-wrapper">
+            <div class="progress-bg"><div class="progress-bar success" style="width: 100%;"></div></div>
+            <span class="progress-text">100%</span>
+          </div>
+        `;
+      }
+      
+      const percentage = Math.min(Math.round((available / required) * 100), 100);
+      let colorClass = 'danger';
+      if (percentage >= 100) {
+        colorClass = 'success';
+      } else if (percentage >= 70) {
+        colorClass = 'warning';
+      }
+
+      return `
+        <div class="progress-wrapper">
+          <div class="progress-bg">
+            <div class="progress-bar ${colorClass}" style="width: ${percentage}%;"></div>
+          </div>
+          <span class="progress-text">${percentage}%</span>
+        </div>
+      `;
+    }
+
+    function renderTableRow(item) {
+      const isDash = item.isDash;
+      const displayAvailable = isDash ? '-' : formatNumber(item.available);
+      const displayRequired = isDash ? '-' : formatNumber(item.required);
+      
+      let totalDeficitBadge = `<span class="badge badge-success">Met</span>`;
+      if (item.totalDeficit > 0) {
+        totalDeficitBadge = `<span class="badge badge-danger">-${item.totalDeficit}</span>`;
+      } else if (isDash) {
+        totalDeficitBadge = `<span class="badge badge-muted">-</span>`;
+      }
+
+      let incrementalDeficitBadge = `<span class="badge badge-success">Met</span>`;
+      if (item.incrementalDeficit > 0) {
+        incrementalDeficitBadge = `<span class="badge badge-warning">+${item.incrementalDeficit} req</span>`;
+      } else if (isDash) {
+        incrementalDeficitBadge = `<span class="badge badge-muted">-</span>`;
+      }
+
+      const progressHTML = isDash ? `<span class="badge badge-muted">-</span>` : generateProgressHTML(item.available, item.required);
+
+      return `
+        <tr>
+          <td class="infra-name">${item.name}</td>
+          <td>${displayAvailable}</td>
+          <td>${displayRequired}</td>
+          <td>${totalDeficitBadge}</td>
+          <td>${incrementalDeficitBadge}</td>
+          <td>${progressHTML}</td>
+        </tr>
+      `;
+    }
+
+    function switchYear(yearKey, buttonElement) {
+      // 1. Update active tab
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      buttonElement.classList.add('active');
+      buttonElement.setAttribute('aria-selected', 'true');
+
+      // 2. Fetch data
+      const data = yearData[yearKey];
+      if (!data) return;
+
+      // 3. Trigger fade-out animation and update content
+      const studentCard = document.getElementById('students-card');
+      const infraCard = document.getElementById('infra-card');
+      const dashboardGrid = document.querySelector('.dashboard-grid');
+      const kpiGrid = document.querySelector('.kpi-grid');
+
+      studentCard.style.opacity = 0;
+      infraCard.style.opacity = 0;
+      kpiGrid.style.opacity = 0;
+
+      setTimeout(() => {
+        // --- Conditionally Show/Hide Student Card, KPI Grid & Adjust Grid Layout ---
+        if (yearKey === "2026-2027") {
+          studentCard.style.display = 'none';
+          kpiGrid.style.display = 'none';
+          dashboardGrid.classList.remove('show-sidebar');
+        } else {
+          studentCard.style.display = 'flex';
+          kpiGrid.style.display = 'grid';
+          dashboardGrid.classList.add('show-sidebar');
+          
+          // Render Student Breakdown
+          document.getElementById('student-academic-year').textContent = yearKey;
+          const studentFlowContainer = document.getElementById('student-flow-details');
+          
+          if (data.students.incoming === "N/A") {
+            studentFlowContainer.style.display = 'none';
+          } else {
+            studentFlowContainer.style.display = 'flex';
+            document.getElementById('student-incoming-val').textContent = formatNumber(data.students.incoming);
+            document.getElementById('student-exiting-val').textContent = formatNumber(data.students.exiting);
+          }
+
+          const studentListContainer = document.getElementById('student-list-container');
+          studentListContainer.innerHTML = data.students.breakdown.map(item => {
+            const displayCount = item.isDash ? '-' : formatNumber(item.count);
+            const tooltipAttr = item.note ? `class="student-prog tooltip-container" data-tooltip="${item.note}"` : `class="student-prog"`;
+            return `
+              <div class="student-item">
+                <span ${tooltipAttr}>${item.program}</span>
+                <span class="student-count">${displayCount}</span>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // --- Render Infrastructure Tables ---
+        document.getElementById('classroom-tbody').innerHTML = data.classrooms.map(renderTableRow).join('');
+        document.getElementById('laboratory-tbody').innerHTML = data.laboratories.map(renderTableRow).join('');
+        document.getElementById('faculty-tbody').innerHTML = data.facultyRooms.map(renderTableRow).join('');
+        document.getElementById('utility-tbody').innerHTML = data.utilities.map(renderTableRow).join('');
+
+        // --- Render KPI cards ---
+        document.getElementById('kpi-students').textContent = formatNumber(data.students.total);
+        if (yearKey === "2026-2027") {
+          document.getElementById('kpi-students-sub').textContent = "Cohort progression estimate";
+        } else {
+          document.getElementById('kpi-students-sub').textContent = "Total headcount on record";
+        }
+
+        // Calculate total required rooms (Classrooms + Labs + Faculty + Utilities)
+        const totalReq = 
+          data.classrooms.reduce((acc, c) => acc + c.required, 0) +
+          data.laboratories.reduce((acc, l) => acc + l.required, 0) +
+          data.facultyRooms.reduce((acc, f) => acc + f.required, 0) +
+          data.utilities.reduce((acc, u) => acc + u.required, 0);
+        document.getElementById('kpi-req-rooms').textContent = totalReq;
+
+        // Calculate total incremental deficit
+        const totalIncDeficit = 
+          data.classrooms.reduce((acc, c) => acc + c.incrementalDeficit, 0) +
+          data.laboratories.reduce((acc, l) => acc + l.incrementalDeficit, 0) +
+          data.facultyRooms.reduce((acc, f) => acc + f.incrementalDeficit, 0) +
+          data.utilities.reduce((acc, u) => acc + u.incrementalDeficit, 0);
+        document.getElementById('kpi-inc-deficit').textContent = totalIncDeficit;
+
+        // Calculate total cumulative deficit
+        const totalCumDeficit = 
+          data.classrooms.reduce((acc, c) => acc + c.totalDeficit, 0) +
+          data.laboratories.reduce((acc, l) => acc + l.totalDeficit, 0) +
+          data.facultyRooms.reduce((acc, f) => acc + f.totalDeficit, 0) +
+          data.utilities.reduce((acc, u) => acc + u.totalDeficit, 0);
+        document.getElementById('kpi-cum-deficit').textContent = totalCumDeficit;
+
+        // --- Render Notes ---
+        document.getElementById('note-list').innerHTML = data.notes.map(n => `<li>${n}</li>`).join('');
+
+        // Fade in
+        if (yearKey !== "2026-2027") {
+          studentCard.style.opacity = 1;
+          kpiGrid.style.opacity = 1;
+        }
+        infraCard.style.opacity = 1;
+      }, 150);
+    }
+
+    // Toggle Theme (Dark / Light)
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    }
+
+    // Initial load configurations
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+      }
+      switchYear('2026-2027', document.querySelector('.year-btn'));
+    });
+  </script>
+</body>
+</html>
