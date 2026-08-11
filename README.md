@@ -19,4 +19,4 @@ An interactive, high-fidelity standalone HTML dashboard designed to analyze and 
 - **Vanilla JavaScript** for dynamic state management, calculations, year toggles, and UI interactions.
 
 ## How to View
-Simply open `dashboard.html` in any web browser to view and interact with the capacity matrices.
+Simply open `index.html` in any web browser to view and interact with the capacity matrices.
