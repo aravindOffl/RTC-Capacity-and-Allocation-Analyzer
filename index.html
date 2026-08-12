@@ -200,7 +200,7 @@
       flex-wrap: wrap;
     }
 
-    .year-switcher {
+    .year-switcher, .institution-switcher {
       display: inline-flex;
       background: var(--bg-surface-glass);
       border: 1px solid var(--border-color);
@@ -211,7 +211,7 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .year-btn {
+    .year-btn, .inst-btn {
       background: transparent;
       border: none;
       color: var(--text-secondary);
@@ -232,12 +232,18 @@
       box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .year-btn:hover:not(.active) {
+    .inst-btn.active {
+      color: white;
+      background: linear-gradient(135deg, #10b981, #0ea5e9);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .year-btn:hover:not(.active), .inst-btn:hover:not(.active) {
       color: var(--text-primary);
       background: rgba(255, 255, 255, 0.05);
     }
 
-    body.light-theme .year-btn:hover:not(.active) {
+    body.light-theme .year-btn:hover:not(.active), body.light-theme .inst-btn:hover:not(.active) {
       background: rgba(0, 0, 0, 0.04);
     }
 
@@ -688,9 +694,16 @@
       
       <!-- Top controls wrapper -->
       <div class="controls-wrapper">
+        <!-- Institution Selector -->
+        <div class="institution-switcher" role="tablist">
+          <button class="inst-btn" role="tab" aria-selected="false" onclick="switchInstitution('Overall', this)">Overall</button>
+          <button class="inst-btn" role="tab" aria-selected="false" onclick="switchInstitution('RTC', this)">RTC</button>
+          <button class="inst-btn" role="tab" aria-selected="false" onclick="switchInstitution('RGU', this)">RGU</button>
+        </div>
+
         <!-- Interactive Year Selector -->
         <div class="year-switcher" role="tablist">
-          <button class="year-btn active" role="tab" aria-selected="true" onclick="switchYear('2026-2027', this)">2026-27 (Current)</button>
+          <button class="year-btn" role="tab" aria-selected="false" onclick="switchYear('2026-2027', this)">2026-27 (Current)</button>
           <button class="year-btn" role="tab" aria-selected="false" onclick="switchYear('2027-2028', this)">2027-28</button>
           <button class="year-btn" role="tab" aria-selected="false" onclick="switchYear('2028-2029', this)">2028-29</button>
         </div>
@@ -922,45 +935,15 @@
 
   <!-- Data Script -->
   <script>
-    const yearData = {
-      "2026-2027": {
-        yearLabel: "Academic Year 2026-2027 (Current)",
-        students: {
-          total: 5850, // Displayed in the top summary card
-          incoming: "N/A",
-          exiting: "N/A",
-          breakdown: [] // Removed student breakdown for this year only
+    const rtcData = {
+      students: {
+        "2026-2027": {
+          total: 5850,
+          incoming: 0,
+          exiting: 0,
+          breakdown: []
         },
-        classrooms: [
-          { name: "No.of 60 seating", available: 59, required: 72, totalDeficit: 13, incrementalDeficit: 13 },
-          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
-          { name: "No.of 30 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
-          { name: "Learning Hubs", available: 9, required: 9, totalDeficit: 0, incrementalDeficit: 0 },
-          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 1 },
-          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        laboratories: [
-          { name: "Hardware lab", available: 16, required: 16, totalDeficit: 0, incrementalDeficit: 0 },
-          { name: "Computer lab", available: 6, required: 10, totalDeficit: 4, incrementalDeficit: 4 }
-        ],
-        facultyRooms: [
-          { name: "Department faculty Rooms", available: 11, required: 13, totalDeficit: 2, incrementalDeficit: 2 },
-          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        utilities: [
-          { name: "Pantry", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 },
-          { name: "Faculty Recreation Room", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        notes: [
-          "Requirement for 2026-2027 classrooms (60-seating) is 13 additional rooms, yielding a total target of 72.",
-          "Requirement for 2026-2027 Brand Builder Studio (BBS) is 1 additional studio, yielding a total target of 4.",
-          "Requirement for 2026-2027 computer labs is 4 additional labs, yielding a total target of 10.",
-          "Requirement for 2026-2027 faculty rooms is 2 additional rooms, yielding a total target of 13."
-        ]
-      },
-      "2027-2028": {
-        yearLabel: "Academic Year 2027-2028 (Upcoming)",
-        students: {
+        "2027-2028": {
           total: 7911,
           incoming: 2920,
           exiting: 859,
@@ -979,35 +962,7 @@
             { program: "Intellect MBA", count: 118 }
           ]
         },
-        classrooms: [
-          { name: "No.of 60 seating", available: 59, required: 101, totalDeficit: 42, incrementalDeficit: 29 },
-          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0, isDash: true },
-          { name: "No.of 30 seating", available: 0, required: 6, totalDeficit: 6, incrementalDeficit: 6 },
-          { name: "Learning Hubs", available: 9, required: 13, totalDeficit: 4, incrementalDeficit: 4 },
-          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 0 },
-          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        laboratories: [
-          { name: "Hardware lab", available: 16, required: 18, totalDeficit: 2, incrementalDeficit: 2 },
-          { name: "Computer lab", available: 6, required: 10, totalDeficit: 4, incrementalDeficit: 0 }
-        ],
-        facultyRooms: [
-          { name: "Department faculty Rooms", available: 11, required: 15, totalDeficit: 4, incrementalDeficit: 2 },
-          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        utilities: [
-          { name: "Pantry", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 1 },
-          { name: "Faculty Recreation Room", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 1 }
-        ],
-        notes: [
-          "Incremental deficits shown exclude the previous year's required additions (2026-2027) which are assumed to be built.",
-          "For 60-seating Classrooms: 101 (Required) - 59 (Baseline) - 13 (26-27 Required) = 29 Incremental Deficit.",
-          "For Computer Labs: 10 (Required) - 6 (Baseline) - 4 (26-27 Required) = 0 Incremental Deficit."
-        ]
-      },
-      "2028-2029": {
-        yearLabel: "Academic Year 2028-2029 (Upcoming)",
-        students: {
+        "2028-2029": {
           total: 9283,
           incoming: 3160,
           exiting: 1488,
@@ -1025,33 +980,268 @@
             { program: "Intellect Engineering", count: 746 },
             { program: "Intellect MBA", count: 120 }
           ]
+        }
+      },
+      classrooms: {
+        "No.of 60 seating": {
+          available: 59,
+          "2026-2027": { required: 72, incrementalDeficit: 13 },
+          "2027-2028": { required: 101, incrementalDeficit: 29 },
+          "2028-2029": { required: 123, incrementalDeficit: 22 }
         },
-        classrooms: [
-          { name: "No.of 60 seating", available: 59, required: 123, totalDeficit: 64, incrementalDeficit: 22 },
-          { name: "No.of 45 seating", available: 0, required: 0, totalDeficit: 0, incrementalDeficit: 0, isDash: true },
-          { name: "No.of 30 seating", available: 0, required: 3, totalDeficit: 3, incrementalDeficit: 0 },
-          { name: "Learning Hubs", available: 9, required: 16, totalDeficit: 7, incrementalDeficit: 3 },
-          { name: "Brand Builder Studio (BBS)", available: 3, required: 4, totalDeficit: 1, incrementalDeficit: 0 },
-          { name: "MBA Seminar Hall", available: 2, required: 2, totalDeficit: 0, incrementalDeficit: 0 }
+        "No.of 45 seating": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 0, incrementalDeficit: 0 },
+          "2028-2029": { required: 0, incrementalDeficit: 0 }
+        },
+        "No.of 30 seating": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 6, incrementalDeficit: 6 },
+          "2028-2029": { required: 3, incrementalDeficit: 0 }
+        },
+        "Learning Hubs": {
+          available: 9,
+          "2026-2027": { required: 9, incrementalDeficit: 0 },
+          "2027-2028": { required: 13, incrementalDeficit: 4 },
+          "2028-2029": { required: 16, incrementalDeficit: 3 }
+        },
+        "Brand Builder Studio (BBS)": {
+          available: 3,
+          "2026-2027": { required: 4, incrementalDeficit: 1 },
+          "2027-2028": { required: 4, incrementalDeficit: 0 },
+          "2028-2029": { required: 4, incrementalDeficit: 0 }
+        },
+        "MBA Seminar Hall": {
+          available: 2,
+          "2026-2027": { required: 2, incrementalDeficit: 0 },
+          "2027-2028": { required: 2, incrementalDeficit: 0 },
+          "2028-2029": { required: 2, incrementalDeficit: 0 }
+        }
+      },
+      laboratories: {
+        "Hardware lab": {
+          available: 16,
+          "2026-2027": { required: 16, incrementalDeficit: 0 },
+          "2027-2028": { required: 18, incrementalDeficit: 2 },
+          "2028-2029": { required: 20, incrementalDeficit: 2 }
+        },
+        "Computer lab": {
+          available: 6,
+          "2026-2027": { required: 10, incrementalDeficit: 4 },
+          "2027-2028": { required: 10, incrementalDeficit: 0 },
+          "2028-2029": { required: 13, incrementalDeficit: 3 }
+        }
+      },
+      facultyRooms: {
+        "Department faculty Rooms": {
+          available: 11,
+          "2026-2027": { required: 13, incrementalDeficit: 2 },
+          "2027-2028": { required: 15, incrementalDeficit: 2 },
+          "2028-2029": { required: 18, incrementalDeficit: 3 }
+        },
+        "Admin faculty Rooms (Office, IQAC, Placement, HR)": {
+          available: 5,
+          "2026-2027": { required: 5, incrementalDeficit: 0 },
+          "2027-2028": { required: 5, incrementalDeficit: 0 },
+          "2028-2029": { required: 5, incrementalDeficit: 0 }
+        }
+      },
+      utilities: {
+        "Pantry": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 1, incrementalDeficit: 1 },
+          "2028-2029": { required: 1, incrementalDeficit: 0 }
+        },
+        "Faculty Recreation Room": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 1, incrementalDeficit: 1 },
+          "2028-2029": { required: 1, incrementalDeficit: 0 }
+        }
+      },
+      notes: {
+        "2026-2027": [
+          "Requirement for 2026-2027 classrooms (60-seating) is 13 additional rooms, yielding a total target of 72.",
+          "Requirement for 2026-2027 Brand Builder Studio (BBS) is 1 additional studio, yielding a total target of 4.",
+          "Requirement for 2026-2027 computer labs is 4 additional labs, yielding a total target of 10.",
+          "Requirement for 2026-2027 faculty rooms is 2 additional rooms, yielding a total target of 13."
         ],
-        laboratories: [
-          { name: "Hardware lab", available: 16, required: 20, totalDeficit: 4, incrementalDeficit: 2 },
-          { name: "Computer lab", available: 6, required: 13, totalDeficit: 7, incrementalDeficit: 3 }
+        "2027-2028": [
+          "Incremental deficits shown exclude the previous year's required additions (2026-2027) which are assumed to be built.",
+          "For 60-seating Classrooms: 101 (Required) - 59 (Baseline) - 13 (26-27 Required) = 29 Incremental Deficit.",
+          "For Computer Labs: 10 (Required) - 6 (Baseline) - 4 (26-27 Required) = 0 Incremental Deficit."
         ],
-        facultyRooms: [
-          { name: "Department faculty Rooms", available: 11, required: 18, totalDeficit: 7, incrementalDeficit: 3 },
-          { name: "Admin faculty Rooms (Office, IQAC, Placement, HR)", available: 5, required: 5, totalDeficit: 0, incrementalDeficit: 0 }
-        ],
-        utilities: [
-          { name: "Pantry", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 0 },
-          { name: "Faculty Recreation Room", available: 0, required: 1, totalDeficit: 1, incrementalDeficit: 0 }
-        ],
-        notes: [
+        "2028-2029": [
           "Incremental deficits shown exclude baseline requirements of both 2026-27 and 2027-28.",
           "For No.of 30 seating Classrooms: requirement dropped from 6 to 3, yielding an incremental deficit of 0.",
           "For Pantry / Recreation Room: requirement remains constant at 1, hence 0 incremental deficit for 2028-2029."
         ]
       }
+    };
+
+    const rguData = {
+      students: {
+        "2026-2027": {
+          total: 8121,
+          incoming: 0,
+          exiting: 0,
+          breakdown: []
+        },
+        "2027-2028": {
+          total: 11078,
+          incoming: 5200,
+          exiting: 2243,
+          breakdown: [
+            { program: "RGU I year UG", count: 3300 },
+            { program: "RGU II year UG", count: 2298 },
+            { program: "RGU III year UG", count: 1810 },
+            { program: "MBA", count: 270 },
+            { program: "RGU I year PG", count: 500 },
+            { program: "RGU II year PG", count: 400 },
+            { program: "RGU School of Law", count: 720 },
+            { program: "RGU School of Engineering", count: 600 },
+            { program: "Ph.D", count: 500 },
+            { program: "Intellect Science", count: 500 },
+            { program: "Intellect Engineering", count: 120 },
+            { program: "Intellect MBA", count: 60 }
+          ]
+        },
+        "2028-2029": {
+          total: 13878,
+          incoming: 5260,
+          exiting: 2680,
+          breakdown: [
+            { program: "RGU I year UG", count: 3300 },
+            { program: "RGU II year UG", count: 3300 },
+            { program: "RGU III year UG", count: 2298 },
+            { program: "MBA", count: 300 },
+            { program: "RGU I year PG", count: 500 },
+            { program: "RGU II year PG", count: 500 },
+            { program: "RGU School of Law", count: 1080 },
+            { program: "RGU School of Engineering", count: 1020 },
+            { program: "Ph.D", count: 800 },
+            { program: "Intellect Science", count: 600 },
+            { program: "Intellect Engineering", count: 120 },
+            { program: "Intellect MBA", count: 60 }
+          ]
+        }
+      },
+      classrooms: {
+        "No.of 60 seating": {
+          available: 89,
+          "2026-2027": { required: 106, incrementalDeficit: 17 },
+          "2027-2028": { required: 177, incrementalDeficit: 74 },
+          "2028-2029": { required: 226, incrementalDeficit: 46 }
+        },
+        "No.of 45 seating": {
+          available: 5,
+          "2026-2027": { required: 5, incrementalDeficit: 0 },
+          "2027-2028": { required: 5, incrementalDeficit: 0 },
+          "2028-2029": { required: 5, incrementalDeficit: 0 }
+        },
+        "No.of 30 seating": {
+          available: 13,
+          "2026-2027": { required: 13, incrementalDeficit: 0 },
+          "2027-2028": { required: 13, incrementalDeficit: 0 },
+          "2028-2029": { required: 13, incrementalDeficit: 0 }
+        },
+        "Learning Hubs": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 2, incrementalDeficit: 2 },
+          "2028-2029": { required: 2, incrementalDeficit: 0 }
+        },
+        "Brand Builder Studio (BBS)": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 1, incrementalDeficit: 1 },
+          "2028-2029": { required: 2, incrementalDeficit: 1 }
+        },
+        "MBA Seminar Hall": {
+          available: 3,
+          "2026-2027": { required: 3, incrementalDeficit: 0 },
+          "2027-2028": { required: 4, incrementalDeficit: 1 },
+          "2028-2029": { required: 4, incrementalDeficit: 0 }
+        }
+      },
+      laboratories: {
+        "Science lab": {
+          available: 4,
+          "2026-2027": { required: 4, incrementalDeficit: 0 },
+          "2027-2028": { required: 5, incrementalDeficit: 1 },
+          "2028-2029": { required: 6, incrementalDeficit: 1 }
+        },
+        "Arts Lab": {
+          available: 3,
+          "2026-2027": { required: 3, incrementalDeficit: 0 },
+          "2027-2028": { required: 4, incrementalDeficit: 1 },
+          "2028-2029": { required: 5, incrementalDeficit: 1 }
+        },
+        "Computer lab": {
+          available: 5,
+          "2026-2027": { required: 5, incrementalDeficit: 0 },
+          "2027-2028": { required: 7, incrementalDeficit: 2 },
+          "2028-2029": { required: 8, incrementalDeficit: 1 }
+        }
+      },
+      facultyRooms: {
+        "Department faculty Rooms": {
+          available: 15,
+          "2026-2027": { required: 15, incrementalDeficit: 0 },
+          "2027-2028": { required: 19, incrementalDeficit: 4 },
+          "2028-2029": { required: 22, incrementalDeficit: 3 }
+        },
+        "Admin faculty Rooms (Office, IQAC, Placement, HR)": {
+          available: 4,
+          "2026-2027": { required: 4, incrementalDeficit: 0 },
+          "2027-2028": { required: 6, incrementalDeficit: 2 },
+          "2028-2029": { required: 9, incrementalDeficit: 3 }
+        }
+      },
+      utilities: {
+        "Pantry": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 1, incrementalDeficit: 1 },
+          "2028-2029": { required: 1, incrementalDeficit: 0 }
+        },
+        "Faculty Recreation Room": {
+          available: 0,
+          "2026-2027": { required: 0, incrementalDeficit: 0 },
+          "2027-2028": { required: 1, incrementalDeficit: 1 },
+          "2028-2029": { required: 1, incrementalDeficit: 0 }
+        }
+      },
+      notes: {
+        "2026-2027": [
+          "Requirement for 2026-2027 classrooms (60-seating) is 14 additional rooms, yielding a total target of 103.",
+          "School of Law classrooms requirement for 2026-2027 is 3 rooms.",
+          "Requirement for 2026-2027 laboratories is 0.",
+          "Requirement for 2026-2027 faculty rooms is 0.",
+          "Other space notes: Moot Court : 1, Staff Room School of Law : 1, School of Law Counselling Room : 1"
+        ],
+        "2027-2028": [
+          "Incremental deficits shown exclude the previous year's required additions (2026-2027) which are assumed to be built.",
+          "For 60-seating Classrooms: 177 (Required) - 89 (Baseline) - 14 (26-27 Required) = 74 Incremental Deficit."
+        ],
+        "2028-2029": [
+          "Incremental deficits shown exclude baseline requirements of both 2026-27 and 2027-28.",
+          "For 60-seating Classrooms: 226 (Required) - 89 (Baseline) - 74 (27-28 Deficit) - 17 (26-27 Deficit + Law) = 46 Incremental Deficit."
+        ]
+      }
+    };
+
+    let currentYear = '2026-2027';
+    let currentInstitution = 'Overall';
+
+    const itemOrder = {
+      classrooms: ["No.of 60 seating", "No.of 45 seating", "No.of 30 seating", "Learning Hubs", "Brand Builder Studio (BBS)", "MBA Seminar Hall"],
+      laboratories: ["Science lab", "Arts Lab", "Hardware lab", "Computer lab"],
+      facultyRooms: ["Department faculty Rooms", "Admin faculty Rooms (Office, IQAC, Placement, HR)"],
+      utilities: ["Pantry", "Faculty Recreation Room"]
     };
 
     function formatNumber(num) {
@@ -1122,20 +1312,139 @@
       `;
     }
 
-    function switchYear(yearKey, buttonElement) {
-      // 1. Update active tab
-      document.querySelectorAll('.year-btn').forEach(btn => {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-selected', 'false');
+    function getInstitutionYearData(instData, year) {
+      const yearLabel = year === "2026-2027" ? "Academic Year 2026-2027 (Current)" : 
+                        year === "2027-2028" ? "Academic Year 2027-2028 (Upcoming)" : 
+                                               "Academic Year 2028-2029 (Upcoming)";
+      
+      const res = {
+        yearLabel: yearLabel,
+        students: {
+          total: instData.students[year].total,
+          incoming: year === "2026-2027" ? "N/A" : instData.students[year].incoming,
+          exiting: year === "2026-2027" ? "N/A" : instData.students[year].exiting,
+          breakdown: instData.students[year].breakdown
+        },
+        classrooms: [],
+        laboratories: [],
+        facultyRooms: [],
+        utilities: [],
+        notes: instData.notes[year] || []
+      };
+
+      const categories = ['classrooms', 'laboratories', 'facultyRooms', 'utilities'];
+      categories.forEach(cat => {
+        for (const [name, item] of Object.entries(instData[cat])) {
+          const yearInfo = item[year];
+          const req = yearInfo ? yearInfo.required : item.available;
+          const incDef = yearInfo ? yearInfo.incrementalDeficit : 0;
+          const totalDef = Math.max(0, req - item.available);
+          
+          res[cat].push({
+            name: name,
+            available: item.available,
+            required: req,
+            totalDeficit: totalDef,
+            incrementalDeficit: incDef,
+            isDash: (item.available === 0 && req === 0 && incDef === 0)
+          });
+        }
+        
+        // Sort items
+        if (itemOrder[cat]) {
+          res[cat].sort((a, b) => {
+            const idxA = itemOrder[cat].indexOf(a.name);
+            const idxB = itemOrder[cat].indexOf(b.name);
+            return (idxA !== -1 ? idxA : 99) - (idxB !== -1 ? idxB : 99);
+          });
+        }
       });
-      buttonElement.classList.add('active');
-      buttonElement.setAttribute('aria-selected', 'true');
 
-      // 2. Fetch data
-      const data = yearData[yearKey];
-      if (!data) return;
+      return res;
+    }
 
-      // 3. Trigger fade-out animation and update content
+    function getCombinedYearData(year) {
+      const yearLabel = year === "2026-2027" ? "Academic Year 2026-2027 (Current)" : 
+                        year === "2027-2028" ? "Academic Year 2027-2028 (Upcoming)" : 
+                                               "Academic Year 2028-2029 (Upcoming)";
+      
+      const rtcYear = getInstitutionYearData(rtcData, year);
+      const rguYear = getInstitutionYearData(rguData, year);
+
+      const res = {
+        yearLabel: yearLabel,
+        students: {
+          total: rtcYear.students.total + rguYear.students.total,
+          incoming: year === "2026-2027" ? "N/A" : (rtcYear.students.incoming + rguYear.students.incoming),
+          exiting: year === "2026-2027" ? "N/A" : (rtcYear.students.exiting + rguYear.students.exiting),
+          breakdown: {
+            rtc: rtcYear.students.breakdown,
+            rgu: rguYear.students.breakdown
+          }
+        },
+        classrooms: [],
+        laboratories: [],
+        facultyRooms: [],
+        utilities: [],
+        notes: {
+          rtc: rtcYear.notes,
+          rgu: rguYear.notes
+        }
+      };
+
+      const categories = ['classrooms', 'laboratories', 'facultyRooms', 'utilities'];
+      categories.forEach(cat => {
+        const rtcItems = rtcYear[cat];
+        const rguItems = rguYear[cat];
+        
+        const itemNames = new Set([
+          ...rtcItems.map(i => i.name),
+          ...rguItems.map(i => i.name)
+        ]);
+
+        itemNames.forEach(name => {
+          const rtcItem = rtcItems.find(i => i.name === name);
+          const rguItem = rguItems.find(i => i.name === name);
+
+          const available = (rtcItem ? rtcItem.available : 0) + (rguItem ? rguItem.available : 0);
+          const required = (rtcItem ? rtcItem.required : 0) + (rguItem ? rguItem.required : 0);
+          const incrementalDeficit = (rtcItem ? rtcItem.incrementalDeficit : 0) + (rguItem ? rguItem.incrementalDeficit : 0);
+          const totalDeficit = Math.max(0, required - available);
+
+          res[cat].push({
+            name: name,
+            available: available,
+            required: required,
+            totalDeficit: totalDeficit,
+            incrementalDeficit: incrementalDeficit,
+            isDash: (available === 0 && required === 0 && incrementalDeficit === 0)
+          });
+        });
+
+        // Sort items
+        if (itemOrder[cat]) {
+          res[cat].sort((a, b) => {
+            const idxA = itemOrder[cat].indexOf(a.name);
+            const idxB = itemOrder[cat].indexOf(b.name);
+            return (idxA !== -1 ? idxA : 99) - (idxB !== -1 ? idxB : 99);
+          });
+        }
+      });
+
+      return res;
+    }
+
+    function getActiveDataset(year, inst) {
+      if (inst === 'RTC') {
+        return getInstitutionYearData(rtcData, year);
+      } else if (inst === 'RGU') {
+        return getInstitutionYearData(rguData, year);
+      } else {
+        return getCombinedYearData(year);
+      }
+    }
+
+    function updateDashboard() {
       const studentCard = document.getElementById('students-card');
       const infraCard = document.getElementById('infra-card');
       const dashboardGrid = document.querySelector('.dashboard-grid');
@@ -1146,8 +1455,10 @@
       kpiGrid.style.opacity = 0;
 
       setTimeout(() => {
+        const data = getActiveDataset(currentYear, currentInstitution);
+
         // --- Conditionally Show/Hide Student Card, KPI Grid & Adjust Grid Layout ---
-        if (yearKey === "2026-2027") {
+        if (currentYear === "2026-2027") {
           studentCard.style.display = 'none';
           kpiGrid.style.display = 'none';
           dashboardGrid.classList.remove('show-sidebar');
@@ -1156,11 +1467,10 @@
           kpiGrid.style.display = 'grid';
           dashboardGrid.classList.add('show-sidebar');
           
-          // Render Student Breakdown
-          document.getElementById('student-academic-year').textContent = yearKey;
+          document.getElementById('student-academic-year').textContent = currentYear;
           const studentFlowContainer = document.getElementById('student-flow-details');
           
-          if (data.students.incoming === "N/A") {
+          if (data.students.incoming === "N/A" || data.students.incoming === 0) {
             studentFlowContainer.style.display = 'none';
           } else {
             studentFlowContainer.style.display = 'flex';
@@ -1169,7 +1479,8 @@
           }
 
           const studentListContainer = document.getElementById('student-list-container');
-          studentListContainer.innerHTML = data.students.breakdown.map(item => {
+          
+          function renderStudentItem(item) {
             const displayCount = item.isDash ? '-' : formatNumber(item.count);
             const tooltipAttr = item.note ? `class="student-prog tooltip-container" data-tooltip="${item.note}"` : `class="student-prog"`;
             return `
@@ -1178,7 +1489,17 @@
                 <span class="student-count">${displayCount}</span>
               </div>
             `;
-          }).join('');
+          }
+
+          if (currentInstitution === 'Overall') {
+            let html = '<div style="font-weight: 600; font-size: 0.8rem; text-transform: uppercase; color: var(--accent); padding: 0.5rem 0.8rem 0.25rem 0.8rem; letter-spacing: 0.05em;">RTC Cohorts</div>';
+            html += data.students.breakdown.rtc.map(renderStudentItem).join('');
+            html += '<div style="font-weight: 600; font-size: 0.8rem; text-transform: uppercase; color: var(--success); padding: 1rem 0.8rem 0.25rem 0.8rem; letter-spacing: 0.05em;">RGU Cohorts</div>';
+            html += data.students.breakdown.rgu.map(renderStudentItem).join('');
+            studentListContainer.innerHTML = html;
+          } else {
+            studentListContainer.innerHTML = data.students.breakdown.map(renderStudentItem).join('');
+          }
         }
 
         // --- Render Infrastructure Tables ---
@@ -1189,41 +1510,51 @@
 
         // --- Render KPI cards ---
         document.getElementById('kpi-students').textContent = formatNumber(data.students.total);
-        if (yearKey === "2026-2027") {
+        if (currentYear === "2026-2027") {
           document.getElementById('kpi-students-sub').textContent = "Cohort progression estimate";
         } else {
           document.getElementById('kpi-students-sub').textContent = "Total headcount on record";
         }
 
-        // Calculate total required rooms (Classrooms + Labs + Faculty + Utilities)
         const totalReq = 
-          data.classrooms.reduce((acc, c) => acc + c.required, 0) +
-          data.laboratories.reduce((acc, l) => acc + l.required, 0) +
-          data.facultyRooms.reduce((acc, f) => acc + f.required, 0) +
-          data.utilities.reduce((acc, u) => acc + u.required, 0);
+          data.classrooms.reduce((acc, c) => acc + (c.isDash ? 0 : c.required), 0) +
+          data.laboratories.reduce((acc, l) => acc + (l.isDash ? 0 : l.required), 0) +
+          data.facultyRooms.reduce((acc, f) => acc + (f.isDash ? 0 : f.required), 0) +
+          data.utilities.reduce((acc, u) => acc + (u.isDash ? 0 : u.required), 0);
         document.getElementById('kpi-req-rooms').textContent = totalReq;
 
-        // Calculate total incremental deficit
         const totalIncDeficit = 
-          data.classrooms.reduce((acc, c) => acc + c.incrementalDeficit, 0) +
-          data.laboratories.reduce((acc, l) => acc + l.incrementalDeficit, 0) +
-          data.facultyRooms.reduce((acc, f) => acc + f.incrementalDeficit, 0) +
-          data.utilities.reduce((acc, u) => acc + u.incrementalDeficit, 0);
+          data.classrooms.reduce((acc, c) => acc + (c.isDash ? 0 : c.incrementalDeficit), 0) +
+          data.laboratories.reduce((acc, l) => acc + (l.isDash ? 0 : l.incrementalDeficit), 0) +
+          data.facultyRooms.reduce((acc, f) => acc + (f.isDash ? 0 : f.incrementalDeficit), 0) +
+          data.utilities.reduce((acc, u) => acc + (u.isDash ? 0 : u.incrementalDeficit), 0);
         document.getElementById('kpi-inc-deficit').textContent = totalIncDeficit;
 
-        // Calculate total cumulative deficit
         const totalCumDeficit = 
-          data.classrooms.reduce((acc, c) => acc + c.totalDeficit, 0) +
-          data.laboratories.reduce((acc, l) => acc + l.totalDeficit, 0) +
-          data.facultyRooms.reduce((acc, f) => acc + f.totalDeficit, 0) +
-          data.utilities.reduce((acc, u) => acc + u.totalDeficit, 0);
+          data.classrooms.reduce((acc, c) => acc + (c.isDash ? 0 : c.totalDeficit), 0) +
+          data.laboratories.reduce((acc, l) => acc + (l.isDash ? 0 : l.totalDeficit), 0) +
+          data.facultyRooms.reduce((acc, f) => acc + (f.isDash ? 0 : f.totalDeficit), 0) +
+          data.utilities.reduce((acc, u) => acc + (u.isDash ? 0 : u.totalDeficit), 0);
         document.getElementById('kpi-cum-deficit').textContent = totalCumDeficit;
 
         // --- Render Notes ---
-        document.getElementById('note-list').innerHTML = data.notes.map(n => `<li>${n}</li>`).join('');
+        if (currentInstitution === 'Overall') {
+          let notesHtml = '';
+          if (data.notes.rtc && data.notes.rtc.length > 0) {
+            notesHtml += `<li style="list-style: none; font-weight: 600; color: var(--accent); margin-bottom: 0.25rem;">RTC Remarks:</li>`;
+            notesHtml += data.notes.rtc.map(n => `<li>${n}</li>`).join('');
+          }
+          if (data.notes.rgu && data.notes.rgu.length > 0) {
+            notesHtml += `<li style="list-style: none; font-weight: 600; color: var(--success); margin-top: 0.75rem; margin-bottom: 0.25rem;">RGU Remarks:</li>`;
+            notesHtml += data.notes.rgu.map(n => `<li>${n}</li>`).join('');
+          }
+          document.getElementById('note-list').innerHTML = notesHtml;
+        } else {
+          document.getElementById('note-list').innerHTML = data.notes.map(n => `<li>${n}</li>`).join('');
+        }
 
         // Fade in
-        if (yearKey !== "2026-2027") {
+        if (currentYear !== "2026-2027") {
           studentCard.style.opacity = 1;
           kpiGrid.style.opacity = 1;
         }
@@ -1231,19 +1562,55 @@
       }, 150);
     }
 
-    // Toggle Theme (Dark / Light)
+    function switchYear(yearKey, buttonElement) {
+      currentYear = yearKey;
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      buttonElement.classList.add('active');
+      buttonElement.setAttribute('aria-selected', 'true');
+      updateDashboard();
+    }
+
+    function switchInstitution(instKey, buttonElement) {
+      currentInstitution = instKey;
+      document.querySelectorAll('.inst-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      buttonElement.classList.add('active');
+      buttonElement.setAttribute('aria-selected', 'true');
+      updateDashboard();
+    }
+
     function toggleTheme() {
       const isLight = document.body.classList.toggle('light-theme');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
 
-    // Initial load configurations
     document.addEventListener("DOMContentLoaded", () => {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
       }
-      switchYear('2026-2027', document.querySelector('.year-btn'));
+      
+      currentInstitution = 'Overall';
+      currentYear = '2026-2027';
+      
+      // Find and activate buttons
+      const firstInstBtn = document.querySelector('.inst-btn');
+      if (firstInstBtn) {
+        firstInstBtn.classList.add('active');
+        firstInstBtn.setAttribute('aria-selected', 'true');
+      }
+      const firstYearBtn = document.querySelector('.year-btn');
+      if (firstYearBtn) {
+        firstYearBtn.classList.add('active');
+        firstYearBtn.setAttribute('aria-selected', 'true');
+      }
+      
+      updateDashboard();
     });
   </script>
 </body>
